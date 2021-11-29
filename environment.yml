@@ -7,7 +7,6 @@ dependencies:
   - numpy
   - pip
   - python
-  - streamlit
   - conda
   - psutil
   - xlrd
@@ -22,7 +21,4 @@ dependencies:
       - coverage
       - pytest
       - pytest-check
-      - requests
-      - matplotlib
-      - docker-py
 prefix: /opt/conda

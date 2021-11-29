@@ -20,27 +20,22 @@ ARG USER_GID=$USER_UID
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
 COPY environment.yml* /tmp/conda-tmp/
-
 COPY .bashrc /root/.bashrc
 
 # Configure apt and install packages
 RUN apt-get update \
     && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
-    #
-    # Verify git, process tools, lsb-release (common in install instructions for CLIs) installed
-    && apt-get -y install git iproute2 procps iproute2 lsb-release nano less jed\
+    && apt-get -y install git iproute2 procps iproute2 lsb-release nano less jed \
     #
     # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
     && groupadd --gid $USER_GID $USERNAME \
     && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    # [Optional] Add sudo support for the non-root user
     && apt-get install -y sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
     && chmod 0440 /etc/sudoers.d/$USERNAME \
-    #
     # JVM
-    && mkdir -p /usr/share/man/man1 && \
-    && apt-get -y install default-jre-headles \
+    && mkdir -p /usr/share/man/man1 \
+    && apt-get -y install default-jre-headless \
     #
     # to download data
     && apt-get -y install netcat curl make wget \
@@ -50,7 +45,6 @@ RUN apt-get update \
     && apt-get install -y libgtk2.0-0 \
     && apt-get install -y libasound2 \
     && apt-get install -y libxrender1 libxtst6 libxi6 libxss1 libgconf-2-4 libnss3-dev \
-    alias orca="xvfb-run orca" \
     # handy tools
     && apt-get -y install imagemagick imagemagick-doc \
     && apt-get -y install libreoffice --no-install-recommends \
@@ -62,12 +56,12 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-
 # Update Python environment based on environment.yml
-RUN opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml \
-    && rm -rf /tmp/conda-tmp
+RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml
+
+RUN alias orca="xvfb-run orca"
 
 # Switch back to dialog for any ad-hoc use of apt-get
-ENV DEBIAN_FRONTEND=
+ENV DEBIAN_FRONTEND=""
 
 ENTRYPOINT ["conda", "activate", "base"]
