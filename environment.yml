@@ -9,6 +9,8 @@ dependencies:
   - python
   - streamlit
   - conda
+  - psutil
+  - xlrd
   - pip:
       - plotly
       - mypy
