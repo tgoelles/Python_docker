@@ -28,6 +28,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          strip_v: false
+
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
@@ -69,5 +75,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ github.event.release.tag_name }}_py3.8,latest_py3.8
+          tags: ${{ steps.tag.outputs.tag }}_py3.8,latest_py3.8
           labels: ${{ steps.meta.outputs.labels }}
+github.event.release.tag_name
