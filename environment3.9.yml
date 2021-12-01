@@ -1,0 +1,24 @@
+name: base
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pandas
+  - numpy
+  - pip
+  - python>3.9
+  - conda
+  - psutil
+  - xlrd
+  - pip:
+      - plotly
+      - mypy
+      - flake8
+      - black
+      - pylint
+      - rich
+      - isort
+      - coverage
+      - pytest
+      - pytest-check
+prefix: /opt/conda

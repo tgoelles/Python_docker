@@ -6,7 +6,7 @@ dependencies:
   - pandas
   - numpy
   - pip
-  - python
+  - python<3.9
   - conda
   - psutil
   - xlrd

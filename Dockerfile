@@ -19,7 +19,7 @@ ARG USER_GID=$USER_UID
 
 # Copy environment.yml (if found) to a temp locaition so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
-COPY environment.yml* /tmp/conda-tmp/
+COPY environment$PYTHON_VERSION.yml /tmp/conda-tmp/
 COPY .bashrc /root/.bashrc
 
 # Configure apt and install packages
@@ -57,7 +57,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Update Python environment based on environment.yml
-RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml
+RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment$PYTHON_VERSION.yml
 
 RUN alias orca="xvfb-run orca"
 
