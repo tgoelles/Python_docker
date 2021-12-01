@@ -77,4 +77,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.tag.outputs.tag }}_py3.8,latest_py3.8
           labels: ${{ steps.meta.outputs.labels }}
-github.event.release.tag_name
