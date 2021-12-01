@@ -28,11 +28,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Get tag
-        id: tag
-        uses: dawidd6/action-get-tag@v1
-        with:
-          strip_v: false
+      - name: Get the tag name
+        if: github.event_name != 'workflow_dispatch'
+        run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      - name: manual tag
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "TAG=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
@@ -75,5 +76,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}_py3.8
-          labels: ${{ steps.meta.outputs.labels }}_py3.8
+          tags: |
+            tgoelles/python_docker:latest_py3.8
+            tgoelles/python_docker:${{ env.TAG }}_py3.8
