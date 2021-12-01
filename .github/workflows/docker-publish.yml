@@ -75,5 +75,5 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.tag.outputs.tags }}_py3.8
+          tags: ${{ steps.meta.outputs.tags }}_py3.8
           labels: ${{ steps.meta.outputs.labels }}_py3.8
