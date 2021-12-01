@@ -17,12 +17,7 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-ARG PYTHON_VERSION
-ENV PYTHON_VERSION=${PYTHON_VERSION}
 
-# Copy environment.yml (if found) to a temp locaition so we update the environment. Also
-# copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
-COPY environment$PYTHON_VERSION.yml /tmp/conda-tmp/
 COPY .bashrc /root/.bashrc
 
 # Configure apt and install packages
@@ -59,7 +54,11 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-# Update Python environment based on environment.yml
+# install conda environment from file
+ARG PYTHON_VERSION
+ENV PYTHON_VERSION=${PYTHON_VERSION}
+
+COPY environment$PYTHON_VERSION.yml /tmp/conda-tmp/
 RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment$PYTHON_VERSION.yml
 
 RUN alias orca="xvfb-run orca"
