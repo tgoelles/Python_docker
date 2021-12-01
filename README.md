@@ -1,4 +1,4 @@
-[![Docker](https://github.com/tgoelles/Python_docker/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/tgoelles/Python_docker/actions/workflows/docker-publish.yml)
+
 ## Info
 
 A basic docker based python environment for use in VSCode.
