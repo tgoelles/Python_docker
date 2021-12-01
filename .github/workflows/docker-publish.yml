@@ -77,5 +77,5 @@ jobs:
           cache-to: type=gha,mode=max
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            tgoelles/python_docker:latest_py3.8
-            tgoelles/python_docker:${{ env.TAG }}_py3.8
+            ghcr.io/tgoelles/python_docker:latest_py3.8
+            ghcr.io/tgoelles/python_docker:${{ env.TAG }}_py3.8
