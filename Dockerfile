@@ -63,6 +63,9 @@ RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment$PYTHON
 
 RUN alias orca="xvfb-run orca"
 
+# allow to conver pdf with imagmagick
+RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=""
 
