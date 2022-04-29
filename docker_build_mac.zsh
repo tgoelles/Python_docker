@@ -1,7 +1,7 @@
 #/bin/zsh
 
-tag="v0.0.1"
+# just for local testing. Everthing is build wiht github actions
 
-docker build --platform linux/amd64,linux/arm64 --rm -f "Dockerfile" -t tgoelles/python_base:$tag "."
-#docker build --rm -f "Dockerfile" -t tgoelles/python_base:$tag "."
-#docker push tgoelles/python_base:$tag
+tag="v0.4.0"
+
+docker build --rm -f "Dockerfile" --build-arg PYTHON_VERSION=3.10 -t tgoelles/python_base:$tag "."
