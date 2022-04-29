@@ -75,4 +75,12 @@ RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xm
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=""
 
-ENTRYPOINT ["conda", "activate", "base"]
+# install the kernel to use with jupyter and some extensions
+RUN /bin/bash -c  'source activate base && \
+    python -m ipykernel install --name base'
+
+# prepend conda environment to path
+ENV PATH $CONDA_DIR/envs/${conda_env}/bin:$PATH
+
+SHELL ["conda", "run", "-n", "base", "/bin/bash", "-c"]
+ENTRYPOINT ["/bin/bash"]
