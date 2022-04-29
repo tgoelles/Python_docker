@@ -23,6 +23,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        python_version: ["3.8", "3.9"]
 
     steps:
       - name: Checkout repository
@@ -66,16 +69,16 @@ jobs:
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
-      - name: Build and push v3.8
+      - name: Build and push ${{ matrix.python_version }}
         uses: docker/build-push-action@v2
         with:
           context: .
-          build-args: PYTHON_VERSION=3.8
+          build-args: PYTHON_VERSION=${{ matrix.python_version }}
           dockerfile: Dockerfile
           platforms: linux/arm64,linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ghcr.io/tgoelles/python_docker:latest_py3.8
-            ghcr.io/tgoelles/python_docker:${{ env.TAG }}_py3.8
+            ghcr.io/tgoelles/python_docker:latest_py${{ matrix.python_version }}
+            ghcr.io/tgoelles/python_docker:${{ env.TAG }}_py${{ matrix.python_version }}
