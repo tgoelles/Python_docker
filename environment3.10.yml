@@ -22,4 +22,5 @@ dependencies:
       - coverage
       - pytest
       - pytest-check
+      - jupyterlab
 prefix: /opt/conda
