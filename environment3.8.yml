@@ -13,11 +13,13 @@ dependencies:
   - ipykernel
   - pip:
       - plotly
+      - kaleido
       - mypy
       - flake8
       - black
       - pylint
       - rich
+      - rich-cli
       - isort
       - coverage
       - pytest
