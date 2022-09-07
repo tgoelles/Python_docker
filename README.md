@@ -3,7 +3,7 @@
 
 ## Info
 
-A miniconda based based Python Docker environment. Made with devcontainers and VS Code in mind.
+A miniconda based Python Docker environment. Made with devcontainers and VS Code in mind.
 
 The image is build and pushed to the github container registry.
 
