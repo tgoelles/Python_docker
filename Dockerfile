@@ -79,6 +79,8 @@ ENV DEBIAN_FRONTEND=""
 RUN /bin/bash -c  'source activate base && \
     python -m ipykernel install --name base'
 
+ENV SHELL /bin/bash
+
 # prepend conda environment to path
 ENV PATH $CONDA_DIR/envs/${conda_env}/bin:$PATH
 
