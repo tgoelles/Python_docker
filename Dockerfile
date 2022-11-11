@@ -4,7 +4,7 @@
 # adapted by Thomas Gölles
 #-------------------------------------------------------------------------------------------------------------
 
-FROM continuumio/miniconda3:4.10.3
+FROM continuumio/miniconda3:4.12.0
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -84,5 +84,5 @@ ENV SHELL /bin/bash
 # prepend conda environment to path
 ENV PATH $CONDA_DIR/envs/${conda_env}/bin:$PATH
 
-SHELL ["conda", "run", "-n", "base", "/bin/bash", "-c"]
-ENTRYPOINT ["/bin/bash"]
+SHELL ["conda", "run", "-n", "base", "/bin/bash", "-l", "-c"]
+ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
