@@ -7,6 +7,12 @@ A miniconda based Python Docker environment. Made with devcontainers and VS Code
 
 The image is build and pushed automatically to the github container registry with every new version tag.
 
+For a standalone use or a quick test use:
+
+```bash
+docker run -it ghcr.io/tgoelles/python_docker:latest_py3.10
+```
+
 ## Features
 
 * multi architecture: AMD64 and ARM64 (for new Mac chips)
