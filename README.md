@@ -16,7 +16,7 @@ docker run -it ghcr.io/tgoelles/python_docker:latest_py3.10
 ## Features
 
 * multi architecture: AMD64 and ARM64 (for new Mac chips)
-* multi Python versions build (currently 3.8, 3.9. and 3.10)
+* multi Python versions build
 * automatic build with github actions after a new version tag is pushed
 * conda and pip packages
 * contains handy tools such as imagemagick, hunspell, wget and more
