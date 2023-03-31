@@ -15,12 +15,10 @@ dependencies:
       - plotly
       - kaleido
       - mypy
-      - flake8
+      - ruff
       - black
-      - pylint
       - rich
       - rich-cli
-      - isort
       - coverage
       - pytest
       - pytest-check
