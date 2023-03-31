@@ -18,8 +18,6 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 
-COPY .bashrc /root/.bashrc
-
 # Configure apt and install packages
 RUN apt-get update \
     && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
@@ -75,14 +73,25 @@ RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xm
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=""
 
-# install the kernel to use with jupyter and some extensions
-RUN /bin/bash -c  'source activate base && \
-    python -m ipykernel install --name base'
-
-ENV SHELL /bin/bash
 
 # prepend conda environment to path
 ENV PATH $CONDA_DIR/envs/${conda_env}/bin:$PATH
 
-SHELL ["conda", "run", "-n", "base", "/bin/bash", "-l", "-c"]
-ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
+# setup Zsh
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.4/zsh-in-docker.sh)" -- \
+    -t https://github.com/romkatv/powerlevel10k \
+    -p https://github.com/zsh-users/zsh-autosuggestions \
+    -p https://github.com/zsh-users/zsh-completions
+
+ENV SHELL /bin/zsh
+
+# zsh config
+COPY .zshrc /root/.zshrc
+COPY .p10k.zsh /tmp/root-code-zsh/.p10k.zsh
+
+# install the kernel to use with jupyter and some extensions
+RUN /bin/zsh -c  'source activate base && \
+    python -m ipykernel install --name base'
+
+SHELL ["conda", "run", "-n", "base", "/bin/zsh", "-l", "-c"]
+ENTRYPOINT [ "/bin/zsh", "-l", "-c" ]
