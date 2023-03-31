@@ -90,8 +90,8 @@ COPY .zshrc /root/.zshrc
 COPY .p10k.zsh /tmp/root-code-zsh/.p10k.zsh
 
 # install the kernel to use with jupyter and some extensions
-RUN /bin/zsh -c  'source activate base && \
+RUN /bin/zsh -c 'source activate base && \
     python -m ipykernel install --name base'
 
-SHELL ["conda", "run", "-n", "base", "/bin/zsh", "-l", "-c"]
-ENTRYPOINT [ "/bin/zsh", "-l", "-c" ]
+SHELL ["conda", "run", "-n", "base", "/bin/zsh", "-l"]
+ENTRYPOINT [ "/bin/zsh", "-l"]
