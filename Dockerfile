@@ -4,7 +4,7 @@
 # adapted by Thomas Gölles
 #-------------------------------------------------------------------------------------------------------------
 
-FROM continuumio/miniconda3:4.12.0
+FROM continuumio/miniconda3:22.11.1
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -36,11 +36,6 @@ RUN apt-get update \
     # to download data
     && apt-get -y install netcat curl make wget \
     #
-    # plotly orca
-    && apt-get install -y xvfb \
-    && apt-get install -y libgtk2.0-0 \
-    && apt-get install -y libasound2 \
-    && apt-get install -y libxrender1 libxtst6 libxi6 libxss1 libgconf-2-4 libnss3-dev \
     # handy tools
     && apt-get -y install imagemagick imagemagick-doc \
     && apt-get -y install libreoffice --no-install-recommends \
@@ -64,8 +59,6 @@ ENV PYTHON_VERSION=${PYTHON_VERSION}
 
 COPY environment$PYTHON_VERSION.yml /tmp/conda-tmp/
 RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment$PYTHON_VERSION.yml
-
-RUN alias orca="xvfb-run orca"
 
 # allow to conver pdf with imagmagick
 RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
