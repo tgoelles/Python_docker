@@ -22,3 +22,8 @@ docker run -it ghcr.io/tgoelles/python_docker:latest_py3.10
 * contains handy tools such as imagemagick, hunspell, wget and more
 * contains libreoffice to convert office documents inside the container
 * using zsh as default shell with powerlevel10k
+
+## Developer Notes
+
+* tag and push the version
+* github action builds the image and pushes it to the registry
