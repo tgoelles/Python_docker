@@ -1,0 +1,26 @@
+name: base
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pandas
+  - numpy
+  - pip
+  - python>=3.12,<3.13
+  - conda
+  - psutil
+  - xlrd
+  - ipykernel
+  - pip:
+      - plotly
+      - kaleido
+      - mypy
+      - ruff
+      - black
+      - rich
+      - rich-cli
+      - coverage
+      - pytest
+      - pytest-check
+      - jupyterlab
+prefix: /opt/conda
