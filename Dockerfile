@@ -57,7 +57,7 @@ ENV LC_ALL en_US.UTF-8
 ARG PYTHON_VERSION
 ENV PYTHON_VERSION=${PYTHON_VERSION}
 
-COPY environment$PYTHON_VERSION.yml /tmp/conda-tmp/
+COPY environment$PYTHON_VERSION.yml /tmp/conda-tmp/environment$PYTHON_VERSION.yml
 RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment$PYTHON_VERSION.yml
 
 # allow to conver pdf with imagmagick
