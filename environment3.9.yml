@@ -23,4 +23,6 @@ dependencies:
       - pytest
       - pytest-check
       - jupyterlab
+      - jupyter
+      - notebook
 prefix: /opt/conda
