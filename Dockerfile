@@ -34,7 +34,7 @@ RUN apt-get update \
     && apt-get -y install default-jre-headless \
     #
     # to download data
-    && apt-get -y install netcat curl make wget \
+    && apt-get -y install netcat curl make wget unzip\
     #
     # handy tools
     && apt-get -y install imagemagick imagemagick-doc \
@@ -63,9 +63,16 @@ RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment$PYTHON
 # allow to conver pdf with imagmagick
 RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
-# Switch back to dialog for any ad-hoc use of apt-get
-ENV DEBIAN_FRONTEND=""
+# install tinytex and texliveonfly
+RUN  /usr/bin/wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh \
+    && echo "export PATH=$HOME/bin:\$PATH" >> ~/.zshrc \
+    && /usr/bin/wget -qP /tmp http://mirrors.ctan.org/support/texliveonfly.zip \
+    && unzip -d /tmp /tmp/texliveonfly.zip \
+    && mv /tmp/texliveonfly/texliveonfly.py ~/bin/texliveonfly \
+    && chmod +x ~/bin/texliveonfly
 
+# tinytex binary path
+ENV PATH=$HOME/bin:\$PATH
 
 # prepend conda environment to path
 ENV PATH $CONDA_DIR/envs/${conda_env}/bin:$PATH
@@ -85,6 +92,10 @@ COPY .p10k.zsh /tmp/root-code-zsh/.p10k.zsh
 # install the kernel to use with jupyter and some extensions
 RUN /bin/zsh -c 'source activate base && \
     python -m ipykernel install --name base'
+
+
+# Switch back to dialog for any ad-hoc use of apt-get
+ENV DEBIAN_FRONTEND=""
 
 SHELL ["conda", "run", "-n", "base", "/bin/zsh", "-l"]
 ENTRYPOINT [ "/bin/zsh", "-l"]
