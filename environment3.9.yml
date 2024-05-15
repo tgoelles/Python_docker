@@ -16,7 +16,6 @@ dependencies:
       - kaleido
       - mypy
       - ruff
-      - black
       - rich
       - rich-cli
       - coverage

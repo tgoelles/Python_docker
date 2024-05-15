@@ -4,7 +4,7 @@
 # adapted by Thomas Gölles
 #-------------------------------------------------------------------------------------------------------------
 
-FROM continuumio/miniconda3:23.10.0-1
+FROM continuumio/miniconda3:24.3.0-0
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -21,7 +21,7 @@ ARG USER_GID=$USER_UID
 # Configure apt and install packages
 RUN apt-get update \
     && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
-    && apt-get -y install locales build-essential git iproute2 procps iproute2 lsb-release nano less jed \
+    && apt-get -y install locales build-essential git iproute2 procps iproute2 lsb-release jed zsh\
     #
     # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
     && groupadd --gid $USER_GID $USERNAME \
@@ -29,18 +29,12 @@ RUN apt-get update \
     && apt-get install -y sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
     && chmod 0440 /etc/sudoers.d/$USERNAME \
-    # JVM
-    && mkdir -p /usr/share/man/man1 \
-    && apt-get -y install default-jre-headless \
-    #
     # to download data
     && apt-get -y install netcat curl make wget unzip\
     #
     # handy tools
     && apt-get -y install imagemagick imagemagick-doc \
-    && apt-get -y install libreoffice --no-install-recommends \
-    && apt-get -y install hunspell man bash-completion \
-    && apt-get -y install libreoffice-java-common \
+    && apt-get -y install hunspell man \
     #
     # Clean up
     && apt-get autoremove -y \
@@ -57,28 +51,27 @@ ENV LC_ALL en_US.UTF-8
 ARG PYTHON_VERSION
 ENV PYTHON_VERSION=${PYTHON_VERSION}
 
-COPY environment$PYTHON_VERSION.yml /tmp/conda-tmp/environment$PYTHON_VERSION.yml
-RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment$PYTHON_VERSION.yml
+
 
 # allow to conver pdf with imagmagick
 RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
-# install tinytex and texliveonfly
-RUN  /usr/bin/wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh \
-    && echo "export PATH=$HOME/bin:\$PATH" >> ~/.zshrc \
-    && /usr/bin/wget -qP /tmp http://mirrors.ctan.org/support/texliveonfly.zip \
+# install tinytex
+RUN  /usr/bin/wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
+
+# texliveonfly
+RUN /usr/bin/wget -qP /tmp http://mirrors.ctan.org/support/texliveonfly.zip \
     && unzip -d /tmp /tmp/texliveonfly.zip \
     && mv /tmp/texliveonfly/texliveonfly.py ~/bin/texliveonfly \
     && chmod +x ~/bin/texliveonfly
 
-# tinytex binary path
-ENV PATH=$HOME/bin:\$PATH
+RUN mv ~/bin /usr/local/bin/latex
 
 # prepend conda environment to path
 ENV PATH $CONDA_DIR/envs/${conda_env}/bin:$PATH
 
 # setup Zsh
-RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.4/zsh-in-docker.sh)" -- \
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
     -t https://github.com/romkatv/powerlevel10k \
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions
@@ -89,13 +82,11 @@ ENV SHELL /bin/zsh
 COPY .zshrc /root/.zshrc
 COPY .p10k.zsh /tmp/root-code-zsh/.p10k.zsh
 
-# install the kernel to use with jupyter and some extensions
-RUN /bin/zsh -c 'source activate base && \
-    python -m ipykernel install --name base'
-
+# addding conda environment
+COPY environment$PYTHON_VERSION.yml /tmp/conda-tmp/environment$PYTHON_VERSION.yml
+RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment$PYTHON_VERSION.yml
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=""
 
-SHELL ["conda", "run", "-n", "base", "/bin/zsh", "-l"]
 ENTRYPOINT [ "/bin/zsh", "-l"]
