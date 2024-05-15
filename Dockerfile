@@ -21,7 +21,7 @@ ARG USER_GID=$USER_UID
 # Configure apt and install packages
 RUN apt-get update \
     && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
-    && apt-get -y install locales build-essential git iproute2 procps iproute2 lsb-release jed zsh\
+    && apt-get -y install locales build-essential git zsh\
     #
     # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
     && groupadd --gid $USER_GID $USERNAME \
@@ -30,11 +30,10 @@ RUN apt-get update \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     # to download data
-    && apt-get -y install netcat curl make wget unzip\
+    && apt-get -y install netcat curl wget unzip\
     #
     # handy tools
-    && apt-get -y install imagemagick imagemagick-doc \
-    && apt-get -y install hunspell man \
+    && apt-get -y install imagemagick imagemagick-doc hunspell man\
     #
     # Clean up
     && apt-get autoremove -y \
