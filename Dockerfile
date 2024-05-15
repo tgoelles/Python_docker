@@ -84,7 +84,7 @@ COPY .p10k.zsh /tmp/root-code-zsh/.p10k.zsh
 # addding conda environment
 COPY environment$PYTHON_VERSION.yml /tmp/conda-tmp/environment$PYTHON_VERSION.yml
 # HACK due to conda bug
-RUN /opt/conda/bin/conda install -y python=3.11
+RUN /opt/conda/bin/conda update conda
 
 RUN /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment$PYTHON_VERSION.yml
 
