@@ -4,7 +4,7 @@
 # adapted by Thomas Gölles
 #-------------------------------------------------------------------------------------------------------------
 
-FROM continuumio/miniconda3:24.3.0-0
+FROM continuumio/miniconda3:latest
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
