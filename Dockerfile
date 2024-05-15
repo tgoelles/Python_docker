@@ -55,16 +55,6 @@ ENV PYTHON_VERSION=${PYTHON_VERSION}
 # allow to conver pdf with imagmagick
 RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
-# install tinytex
-RUN  /usr/bin/wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
-
-# texliveonfly
-RUN /usr/bin/wget -qP /tmp http://mirrors.ctan.org/support/texliveonfly.zip \
-    && unzip -d /tmp /tmp/texliveonfly.zip \
-    && mv /tmp/texliveonfly/texliveonfly.py ~/bin/texliveonfly \
-    && chmod +x ~/bin/texliveonfly
-
-RUN mv ~/bin /usr/local/bin/latex
 
 # prepend conda environment to path
 ENV PATH $CONDA_DIR/envs/${conda_env}/bin:$PATH
